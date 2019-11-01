@@ -1,0 +1,64 @@
+server:
+  port: 8763
+
+spring:
+  application:
+    name: cloud-stock
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://127.0.0.1:3306/milo_stock?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
+    username: root
+    password: 123456hao123
+    hikari:
+      minimum-idle: 20
+      maximum-pool-size: 100
+      idle-timeout: 30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      max-lifetime: 1800000
+
+#eureka client
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+#熔断配置（配置微服务之间的调用超时）
+feign:
+  hystrix:
+    enabled: true
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 10000
+
+#mybatis-plus
+mybatis-plus:
+  type-aliases-package: com.luke.cloud.stock.bean
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: uuid
+  configuration:
+    map-underscore-to-camel-case: true
+
+#milo tcc 配置
+milo-tcc:
+  model-name: stock
+  retry-max: 3
+  milo-db-config:
+    url: jdbc:mysql://127.0.0.1:3306/milo_tcc?useUnicode=true&characterEncoding=utf8&useSSL=false&useAffectedRows=true
+    username: root
+    password: 123456hao123
+    minimum-idle: 20
+    maximum-pool-size: 100
+    idle-timeout: 30000
+    connection-timeout: 30000
+    connection-test-query: SELECT 1
+    max-lifetime: 1800000

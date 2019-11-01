@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.luke.milo.spring.cloud.starter.configuration.MiloAutoConfiguration

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace值为接口全类名：实现接口式编程 -->
+<mapper namespace="com.luke.cloud.order.dao.OrderMapper">
+
+</mapper>

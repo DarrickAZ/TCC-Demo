@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace值为接口全类名：实现接口式编程 -->
+<mapper namespace="com.luke.cloud.stock.dao.StockMapper">
+
+    <update id="lockStock">
+        update tbl_stock set lock_stock = lock_stock + #{lockStock}, total_stock = total_stock - #{lockStock},
+        update_time = #{time}
+        where id = #{id} and total_stock >= #{lockStock}
+    </update>
+
+    <update id="lockStockConfirm">
+        update tbl_stock set lock_stock = lock_stock - #{lockStock},update_time = #{time}
+        where product_name = #{productName} and lock_stock >= #{lockStock}
+    </update>
+
+    <update id="lockStockCancel">
+        update tbl_stock set lock_stock = lock_stock - #{lockStock}, total_stock = total_stock + #{lockStock},
+        update_time = #{time}
+        where product_name = #{productName} and lock_stock >= #{lockStock}
+    </update>
+
+</mapper>

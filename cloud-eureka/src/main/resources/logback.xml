@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<!--<property resource="application.yml" />-->
+	<!-- <springProperty scope="context" name="LOG_HOME" source="logback.log.home"/> -->
+	<property name="LOG_HOME" value="/milo/logs" />
+	<property name="APP_NAME" value="cloud-eureka" />
+
+	<!-- 定义控制台输出 -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{60} - %msg%n</pattern>
+		</layout>
+	</appender>
+
+	<!-- 定义文件输出 -->
+	<appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 指定日志文件的名称 -->
+		<file>${LOG_HOME}/${APP_NAME}.log</file>
+		<!-- 当发生滚动时，决定 RollingFileAppender 的行为，涉及文件移动和重命名 TimeBasedRollingPolicy： 
+			最常用的滚动策略，它根据时间来制定滚动策略，既负责滚动也负责出发滚动。 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 滚动时产生的文件的存放位置及文件名称 %d{yyyy-MM-dd}：按天进行日志滚动 %i：当文件大小超过maxFileSize时，按照i进行文件滚动 -->
+			<fileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+			<!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件。假设设置每天滚动， 且maxHistory是30，则只保存最近30天的文件，删除之前的旧文件。注意，删除旧文件是， 
+				那些为了归档而创建的目录也会被删除。 -->
+			<MaxHistory>30</MaxHistory>
+			<maxFileSize>50MB</maxFileSize>
+		</rollingPolicy>
+		<!-- 日志输出格式：%d表示日期时间，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %logger{50} 表示logger名字最长50个字符，否则按照句点分割。 
+			%msg：日志消息，%n是换行符 -->
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] - [ %-5level ] [%logger{60} : %line ] - %msg%n</pattern>
+		</layout>
+	</appender>
+	
+	 <!-- 异步输出 -->  
+     <appender name ="asyncOutput" class= "ch.qos.logback.classic.AsyncAppender">  
+            <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->  
+            <discardingThreshold >0</discardingThreshold>  
+            <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->  
+            <queueSize>1024</queueSize>  
+            <!-- 添加附加的appender,最多只能添加一个 -->  
+         <appender-ref ref ="file"/>  
+     </appender>  
+
+	<root level="debug">
+		<appender-ref ref="stdout" />
+	</root>
+	
+	<root level="info">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="asyncOutput" />
+	</root>
+	
+</configuration>
+
